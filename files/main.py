@@ -12,6 +12,7 @@ def create_decorator(value):
     
     return create_function
 
+
 def convert_to_number(x):
     try:
         return int(x)
@@ -31,8 +32,8 @@ input_ = ''
 layout = [[sg.Input(key='input', size=40, justification='right', default_text=input_, disabled=True)],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
           [model_button('4'), model_button('5'), model_button('6'), model_button('-')],
-          [model_button('1'), model_button('2'), model_button('3'), model_button('*')],
-          [model_button('0'), model_button('='), model_button(','), model_button('/')]
+          [model_button('1'), model_button('2'), model_button('3'), model_button('x')],
+          [model_button(','), model_button('0'), model_button('='), model_button('/')]
           ]
 
 window = sg.Window('Calculator', layout)
@@ -44,18 +45,22 @@ while True:
     if event is None:
 
         break
-
-    input_ += event
-
-    window['input'].update(input_)
-    window.refresh()
-
-    print(event, value)
     
     if convert_to_number(event) is None:   
 
-        ...
+        if value['input'] == '':
 
+            continue
         
+    else:
 
+        input_ += event
+
+    if event in '+-x/=':
+
+        print(event)
     
+    window['input'].update(input_)
+    window.refresh()
+
+   
