@@ -25,7 +25,10 @@ def model_button(txt, num):
 
     return sg.Button(txt, size=num)
 
-layout = [[sg.Input(size=40, justification='right')],
+
+input_ = ''
+
+layout = [[sg.Input(key='input', size=40, justification='right', default_text=input_, disabled=True)],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
           [model_button('4'), model_button('5'), model_button('6'), model_button('-')],
           [model_button('1'), model_button('2'), model_button('3'), model_button('*')],
@@ -41,8 +44,18 @@ while True:
     if event is None:
 
         break
-    
-    print(convert_to_number(event))
-        
+
+    input_ += event
+
+    window['input'].update(input_)
+    window.refresh()
 
     print(event, value)
+    
+    if convert_to_number(event) is None:   
+
+        ...
+
+        
+
+    
