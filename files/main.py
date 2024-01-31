@@ -18,16 +18,15 @@ def convert_to_number(x):
         return float(x)
     except ValueError:
         return None
-        
 
 @create_decorator(7)
 
 def model_button(txt, num):
 
-    return sg.Button(txt, size=num)
+    return sg.Button(button_text=txt, size=num)
 
 
-input_ = ''
+input_, previous_value, current_value = '', None, None
 
 layout = [[sg.Input(key='input', size=30, justification='right', default_text=input_, disabled=True), model_button('<<')],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
@@ -45,35 +44,53 @@ while True:
     if event is None:
 
         break
+
+    if event not in '+-/x=<<':
+
+        if event not in '.':
+
+            input_ += event
+
+        current_value = convert_to_number(input_)
     
-    if convert_to_number(event) is None:   
-
-        if value['input'] == '':
-
-            continue
-
-    else:  
-
-        input_ += event
-    
-    if event == '.' and '.' not in input_ :
+    if event == '.' and '.' not in input_:
 
         input_ += '.'
 
     if event == '<<':
 
         input_ = input_[:-1]
+        current_value = convert_to_number(input_)
 
-    if event in '+-x/':
+    if event in '+-/x=':
 
-        print(event)
+        previous_value = current_value
+        current_value, input_ = None, ''
 
+        print(f'OPERATION! old: {previous_value} | new: {current_value}')
 
+        if event == '+':
 
+            ...
 
+        if event == '-':
 
-    
+            ...
+        
+        if event == 'x':
+
+            ...
+        
+        if event == '/':
+
+            ...
+
+        if event == '=':
+
+            ...
+
     window['input'].update(input_)
     window.refresh()
 
-   
+window.close()
+print('end')
