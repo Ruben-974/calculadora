@@ -15,7 +15,7 @@ def create_decorator(value):
 
 def convert_to_number(x):
     try:
-        return int(x)
+        return float(x)
     except ValueError:
         return None
         
@@ -29,11 +29,11 @@ def model_button(txt, num):
 
 input_ = ''
 
-layout = [[sg.Input(key='input', size=40, justification='right', default_text=input_, disabled=True)],
+layout = [[sg.Input(key='input', size=30, justification='right', default_text=input_, disabled=True), model_button('<<')],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
           [model_button('4'), model_button('5'), model_button('6'), model_button('-')],
           [model_button('1'), model_button('2'), model_button('3'), model_button('x')],
-          [model_button(','), model_button('0'), model_button('='), model_button('/')]
+          [model_button('.'), model_button('0'), model_button('='), model_button('/')]
           ]
 
 window = sg.Window('Calculator', layout)
@@ -51,14 +51,27 @@ while True:
         if value['input'] == '':
 
             continue
-        
-    else:
+
+    else:  
 
         input_ += event
+    
+    if event == '.' and '.' not in input_ :
 
-    if event in '+-x/=':
+        input_ += '.'
+
+    if event == '<<':
+
+        input_ = input_[:-1]
+
+    if event in '+-x/':
 
         print(event)
+
+
+
+
+
     
     window['input'].update(input_)
     window.refresh()
