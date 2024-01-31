@@ -12,6 +12,13 @@ def create_decorator(value):
     
     return create_function
 
+def convert_to_number(x):
+    try:
+        return int(x)
+    except ValueError:
+        return None
+        
+
 @create_decorator(7)
 
 def model_button(txt, num):
@@ -26,6 +33,16 @@ layout = [[sg.Input(size=40, justification='right')],
           ]
 
 window = sg.Window('Calculator', layout)
-evente, value = window.read()
 
-print(evente, value)
+while True:
+
+    event, value = window.read()
+
+    if event is None:
+
+        break
+    
+    print(convert_to_number(event))
+        
+
+    print(event, value)
