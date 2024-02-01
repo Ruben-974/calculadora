@@ -16,7 +16,7 @@ def create_decorator(value):
 def convert_to_number(x):
     try:
         return float(x)
-    except ValueError:
+    except (TypeError, ValueError):
         return None
 
 @create_decorator(7)
@@ -26,7 +26,7 @@ def model_button(txt, num):
     return sg.Button(button_text=txt, size=num)
 
 
-input_, previous_value, current_value, operator, result = '', None, None, None, None
+input_, previous_value, current_value, operator, result, save_input_ = '', None, None, None, None, None
 
 layout = [[sg.Input(key='input', size=30, justification='right', default_text=input_, disabled=True), model_button('<<')],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
@@ -61,6 +61,10 @@ while True:
 
         input_ = input_[:-1]
         current_value = convert_to_number(input_)
+    
+        if previous_value != None:
+
+            previous_value = convert_to_number(input_)
 
     if event in '+-/x=':
 
@@ -88,25 +92,28 @@ while True:
 
         if operator == '=' or event == '=':
 
-            input_ = str(result)
-            
-            previous_value = result
+            if convert_to_number(result) != None:
+                input_ = str(result)
 
         else:
 
-            operator = event
+             operator = event
 
+        previous_value = result
+            
         if result is None:
 
             previous_value = current_value
 
         current_value = None
+        
 
         print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
 
 
     window['input'].update(input_)
     window.refresh()
+    print(input_, result)
 
 window.close()
 print('end')
