@@ -19,7 +19,7 @@ def convert_to_number(x):
     except (TypeError, ValueError):
         return None
 
-@create_decorator(7)
+@create_decorator(8)
 
 def model_button(txt, num):
 
@@ -28,11 +28,18 @@ def model_button(txt, num):
 
 input_, previous_value, current_value, operator, result, save_input_ = '', None, None, None, None, None
 
-layout = [[sg.Input(key='input', size=30, justification='right', default_text=input_, disabled=True), model_button('<<')],
-          [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
-          [model_button('4'), model_button('5'), model_button('6'), model_button('-')],
-          [model_button('1'), model_button('2'), model_button('3'), model_button('x')],
-          [model_button('.'), model_button('0'), model_button('='), model_button('/')]
+layout = [[
+    sg.Input(key='operator', size=5, justification='center', default_text=input_, disabled=True, ),
+    sg.Input(key='memory', size=18, justification='center', default_text=input_, disabled=True, ), 
+    sg.Input(key='input', size=29, justification='right', default_text=input_, disabled=True, )
+    
+    
+    ],
+           
+          [model_button('7'), model_button('8'), model_button('9'), model_button('C'), model_button('^')],
+          [model_button('4'), model_button('5'), model_button('6'), model_button('CE'), model_button('%')],
+          [model_button('1'), model_button('2'), model_button('3'), model_button('x'), model_button('+')],
+          [model_button('.'), model_button('0'), model_button('='), model_button('/'), model_button('-')]
           ]
 
 window = sg.Window('Calculator', layout)
@@ -45,7 +52,7 @@ while True:
 
         break
 
-    if event not in '+-/x=<<':
+    if event not in '+-/x=CE':
 
         if event not in '.':
 
@@ -57,20 +64,17 @@ while True:
 
         input_ += '.'
 
-    if event == '<<':
+    if event in ('+', '-', 'x', '/', 'CE', 'C', '='):
 
-        input_ = input_[:-1]
-        current_value = convert_to_number(input_)
-    
-        if previous_value != None:
+        print(value, operator)
 
-            previous_value = convert_to_number(input_)
+        if event == 'C':
 
-    if event in '+-/x=':
+            previous_value = current_value = result = None
+
+        print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result} | input_: {input_}')
 
         input_ = ''
-
-        #print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
 
         if previous_value != None and current_value != None:
 
@@ -90,6 +94,10 @@ while True:
 
                 result = previous_value / current_value
 
+            if operator == 'CE':
+
+                result = None
+
         if operator == '=' or event == '=':
 
             if convert_to_number(result) != None:
@@ -107,13 +115,16 @@ while True:
 
         current_value = None
         
-
-        print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
-
+        #print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
 
     window['input'].update(input_)
+    if event != 'C':
+        window['memory'].update(result)
+    else:
+        window['memory'].update('')
+    if convert_to_number(event) is None:
+        window['operator'].update(event)
     window.refresh()
-    print(input_, result)
 
 window.close()
 print('end')
