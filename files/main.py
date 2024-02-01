@@ -26,7 +26,7 @@ def model_button(txt, num):
     return sg.Button(button_text=txt, size=num)
 
 
-input_, previous_value, current_value = '', None, None
+input_, previous_value, current_value, operator, result = '', None, None, None, None
 
 layout = [[sg.Input(key='input', size=30, justification='right', default_text=input_, disabled=True), model_button('<<')],
           [model_button('7'), model_button('8'), model_button('9'), model_button('+')],
@@ -64,30 +64,46 @@ while True:
 
     if event in '+-/x=':
 
-        previous_value = current_value
-        current_value, input_ = None, ''
+        input_ = ''
 
-        print(f'OPERATION! old: {previous_value} | new: {current_value}')
+        #print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
 
-        if event == '+':
+        if previous_value != None and current_value != None:
 
-            ...
+            if operator == '+':
 
-        if event == '-':
+                result = previous_value + current_value
 
-            ...
-        
-        if event == 'x':
+            if operator == '-':
 
-            ...
-        
-        if event == '/':
+                result = previous_value - current_value
+            
+            if operator == 'x':
 
-            ...
+                result = previous_value * current_value
+            
+            if operator == '/':
 
-        if event == '=':
+                result = previous_value / current_value
 
-            ...
+        if operator == '=' or event == '=':
+
+            input_ = str(result)
+            
+            previous_value = result
+
+        else:
+
+            operator = event
+
+        if result is None:
+
+            previous_value = current_value
+
+        current_value = None
+
+        print(f'OPERATION! old: {previous_value} | new: {current_value} | operator: {operator} | result: {result}')
+
 
     window['input'].update(input_)
     window.refresh()
